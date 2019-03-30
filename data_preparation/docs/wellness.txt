@@ -1,0 +1,22 @@
+Features in Wellness:
+    Pain [0, 1] - no NaNs
+    Illness [0, 0.5, 1] - no NaNs
+    Menstruation [0, 1] - 16 NaNs, filled with 0. Not a big statistical difference, so this is fine
+    Nutrition [0, 0.5, 1] - 837 NaN, filled with 0. Not a useful feature
+    NutritionAdj [0, 1] - 745 NaN, filled with 0. Again not useful
+    USGMeasurement [0, 1] 168 NaN, filled with 0.
+    USG [1.0...] 4382 NaN, not a useful feature
+    TrainingReadiness [0..1] - no NaNs
+
+Useful features include Pain, Illness, Menstruation, TrainingReadiness
+The others either have too many NaNs present to extract any useful meaning or are just unhelpful features
+to begin with, like Nutrition.
+
+
+Notnormalized_with_0NaN_wellness.csv:
+
+- The only feature of significance that had NaN values put into it were Menstruation, as only 16 NaNs were present
+and wouldn't present any statistical difference either way.
+
+- Working in the notnormalized_with_0NaN_wellness csv should be functional, just have to remove any string columns
+before putting into algorithms as they are not removed in this version
