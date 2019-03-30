@@ -16,8 +16,6 @@ averageWorkLoad <- c()
 
 for(day in dayList)
 {
-  total <- 0
-  
   daylyActivities <- subset(RPEData, TimeSinceAugFirst == day)
   cat("day: ", day, "\n",sep="")
   cat("Activity count:", length(daylyActivities$DailyLoad), "\n", sep="")
@@ -31,7 +29,7 @@ plot(dayList, workLoad, main="Daily Total Work Load")
 
 slidingAverage <- c()
 
-window <- 7 - 1
+window <- 31 - 1
 for(day in window:numDays)
 {
   windowAverage <- mean(workLoad[c((day-window):day)])
@@ -56,4 +54,39 @@ ggplot(data = dataTibble) +
   theme_bw()
 
 
+
 write.csv(dataTibble, "cleaned/slidingWorkAverageSevenDay.csv")
+
+
+################################      Wellness Data      ###################################
+
+fatigueData <- readFatigueSums()
+
+dayNum <- max(fatigueData$TimeSinceAugFirst)
+
+dayList <- 0:dayNum
+
+
+slidingAverage <- c()
+window <- 21 - 1
+for(day in window:dayNum)
+{
+  windowAverage <- mean(fatigueData$fatigueSum[c((day-window):day)], na.rm = T)
+  
+  slidingAverage <- c(slidingAverage, windowAverage)
+}
+
+graphingTib <- tibble(slidingAverage = slidingAverage, days = window:dayNum)
+
+ggplot(data = graphingTib) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Average Normalized Fatigue") + 
+  geom_point(mapping = aes(x=days, y=slidingAverage)) + 
+  labs(x = "Days Since August Twenty First 2017", y = "Teams Average Normalized Fatigue")+ 
+  theme_bw()
+
+plot(density(slidingAverage))
+plot(window:dayNum, slidingAverage)
+
+
+
