@@ -133,3 +133,4 @@ rsconnect/
 
 # datafest
 data_preparation/data/*.csv
+*.big
