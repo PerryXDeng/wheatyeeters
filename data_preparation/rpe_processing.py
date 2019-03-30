@@ -57,4 +57,5 @@ mapping[np.nan] = 1
 vectorize_mult('BestOutOfMyself', mapping, "Unknown", csv)
 mapping[np.nan] = 0
 
+print(csv.isnull().sum*())
 csv.to_csv("cleaned/notnormalized_clean_rpe.csv")
