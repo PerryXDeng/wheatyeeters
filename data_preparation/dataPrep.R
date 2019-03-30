@@ -14,7 +14,6 @@ gpsDataTibble <- as_tibble(gpsData)
 
 
 
-
 #workingTibble <- head(gpsDataTibble, 500000)
 
 workingTibble <- gpsDataTibble
@@ -85,11 +84,63 @@ rpeData <- read.csv("./data/rpe.csv")
 rpeDataTibble <- as_tibble(rpeData)
 
 
-gameData <- read.csv("./data/game.csv")
+gameData <- read.csv("data/games.csv")
 gameDataTibble <- as_tibble(gameData)
 
 
-wellnessData <- read.csv("./data/wellness.csv")
+wellnessData <- read.csv("./data/wellness_na.csv")
 wellnessDataTibble <- as_tibble(wellnessData)
+
+
+wellnesPlayer1 <- subset(wellnessDataTibble, PlayerID == 1)
+
+plot(wellnesPlayer1$Fatigue * wellnesPlayer1$Soreness * wellnesPlayer1$Irritability, wellnesPlayer1$SleepHours * wellnesPlayer1$SleepQuality)
+
+
+wellnessCleaned <- as_tibble(read.csv("./cleaned/dirty_wellness.csv"))
+
+
+ggplot(data = wellnessCleaned) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Hours of Sleep Box Plot") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=SleepHours, group = PlayerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Hours of Sleep") +
+  coord_flip() +
+  theme_bw()
+
+
+ggplot(data = wellnessCleaned) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Hours of Sleep Box Plot") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=Fatigue, group = PlayerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Fatigue Score") +
+  coord_flip() +
+  theme_bw()
+
+
+ggplot(data = wellnessCleaned) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Sleep Quality Box Plot") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=SleepQuality, group = PlayerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Sleep Quality") +
+  coord_flip() +
+  theme_bw()
+
+
+ggplot(data = wellnessCleaned) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Training Readiness Box Plot") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=TrainingReadinessNum, group = PlayerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Training Readiness") +
+  coord_flip() +
+  theme_bw()
+
+
+max(wellnessCleaned$SleepHours, na.rm = T)
+min(wellnessCleaned$SleepHours, na.rm = T)
+
+
+playerIdsWellness <-unique(wellnessCleaned$PlayerID)
+cat("Number of Players: ", length(playerIdsWellness), sep="")
 
 head(gpsData)
