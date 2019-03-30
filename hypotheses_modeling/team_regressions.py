@@ -17,7 +17,11 @@ def k_days_into_future_regression(X, y, k, n0):
   out = []
   for day in y[col][n0 - 1:]:
     prev = day - k
-    xprev = X[X[col] == prev].drop(columns=[col]).to_numpy()[0, :]
+    xprev = X[X[col] == prev].drop(columns=[col]).to_numpy()
+    if xprev.shape[0] != 1:
+      continue
+    else:
+      xprev = xprev[0, :]
     yt = y[y[col] == day].drop(columns=[col]).to_numpy()[0, :]
     inp.append(xprev)
     out.append(yt)
@@ -31,8 +35,8 @@ def k_days_into_future_regression(X, y, k, n0):
 
 def main():
   fatigueSums = pd.read_csv("fatigue_total_sum.csv")
-  workMovingAverage21 = pd.read_csv("21DaySlidingWorkAverage.csv", index_col=0)
-  print(k_days_into_future_regression(workMovingAverage21, fatigueSums, 0, 21))
+  performance = pd.read_csv("../data_preparation/cleaned/expSmoothWorkAndFatigueData.csv", index_col=0).drop(columns=["totalWork", "averageWorkLoad", "smoothedFatigueData"])
+  print(k_days_into_future_regression(fatigueSums, performance, 0, 1))
 
 
 if __name__ == "__main__":
