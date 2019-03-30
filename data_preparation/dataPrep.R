@@ -7,7 +7,7 @@ library(tidyverse)
 library(DBI)
 library(RSQLite)
 
-gpsData <- read.csv("data/gps.csv")
+gpsData <- read.csv("data/gps.csv")c
 
 
 gpsDataTibble <- as_tibble(gpsData)
