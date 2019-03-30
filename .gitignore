@@ -133,3 +133,6 @@ rsconnect/
 
 # datafest
 data_preparation/data/*.csv
+data_preparation/cleaned/games.csv
+data_preparation/cleaned/gps.csv
+data_preparation/cleaned/rpe.csv
