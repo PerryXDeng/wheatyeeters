@@ -30,7 +30,6 @@ def normalize_time_series(path, filename, start):
 
 
 start = start_end_times("data/rpe.csv")
-normalize_time_series("cleaned/dirty_wellness.csv", "dirty_wellness.csv", start)
-normalize_time_series("cleaned/dirty_wellness_na.csv", "dirty_wellness_na.csv", start)
+normalize_time_series("cleaned/notnormalized_with_0NaN_wellness.csv", "notnormalized_with_0NaN_wellness.csv", start)
 normalize_time_series("cleaned/notnormalized_with_0Nan_rpe.csv", "notnormalized_with_0Nan_rpe.csv", start)
 normalize_time_series("cleaned/notnormalized_with_continuousNan_rpe.csv", "notnormalized_with_continuousNan_rpe.csv", start)
