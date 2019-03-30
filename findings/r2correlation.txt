@@ -1,5 +1,0 @@
-Document Linear Relationship
-7 day moving average team workload - normalized team fatigue: 0.0006
-21 day moving average team workload - normalized team fatigue: 0.0024
-normalized team fatigue - game day performance: 0.0696
-normalized team fatigue - paper smoothed workload fatigue: 0.0324
