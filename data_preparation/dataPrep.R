@@ -4,6 +4,9 @@
 
 library(tidyverse)
 
+library(DBI)
+library(RSQLite)
+
 gpsData <- read.csv("data/gps.csv")
 
 
@@ -12,13 +15,16 @@ gpsDataTibble <- as_tibble(gpsData)
 
 
 
-workingTibble <- head(gpsDataTibble, 100000)
+#workingTibble <- head(gpsDataTibble, 500000)
+
+workingTibble <- gpsDataTibble
 
 
 playerIds <-unique(workingTibble$PlayerID)
-
+cat("Number of Players: ", length(playerIds), sep="")
 
 gameIds <- unique(workingTibble$GameID)
+cat("Number of Games: ", length(gameIds), sep="")
 
 
 playerIDMetrics <- c()
@@ -37,16 +43,11 @@ for(playerID in playerIds)
     
     
     # crunch average speed    
-    averageSpeed <- c(averageSpeed, mean(speedTibble$Speed))
+    averageSpeed <- c(averageSpeed, mean(speedTibble$Speed, na.rm = 0))
     
     # average for accel value  
     
-    accelDistance <- c(accelDistance, mean(sqrt(speedTibble$AccelX^2 + speedTibble$AccelY^2 + speedTibble$AccelZ^ 2)))
-    
-    
-    #xAccel <- c(xAccel, mean(speedTibble$AccelX))
-    #yAccel <- c(yAccel, mean(speedTibble$AccelY))
-    #zAccel <- c(zAccel, mean(speedTibble$AccelZ))
+    accelDistance <- c(accelDistance, mean(sqrt(speedTibble$AccelX^2 + speedTibble$AccelY^2 + speedTibble$AccelZ^ 2), na.rm = 0))
     
   
     # game and player id to vector
@@ -57,6 +58,23 @@ for(playerID in playerIds)
 
 
 plot(accelDistance, averageSpeed)
+
+compressedMetrics <- tibble(gameID = gameIDMetrics, playerID = playerIDMetrics, averageSpeed = averageSpeed, accelerationVector = accelDistance)
+
+
+length(compressedMetrics$averageSpeed)
+length(compressedMetrics$accelerationVector)
+
+write.csv(compressedMetrics, "data/speedData.csv")
+
+#putSQLiteHere <- "gpsData.sqlite" # could also be ":memory:"
+#mySQLiteDB <- dbConnect(RSQLite::SQLite(),putSQLiteHere)
+
+
+#dbWriteTable(mySQLiteDB, "gpsData", compressedMetrics, overwrite=TRUE)
+
+#dbDisconnect(mySQLiteDB)
+
 
 
 
