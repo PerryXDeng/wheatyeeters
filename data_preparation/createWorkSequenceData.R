@@ -40,11 +40,22 @@ for(day in window:numDays)
   slidingAverage <- c(slidingAverage, windowAverage)
 }
 
+
+
 plot(window:numDays, slidingAverage, main="Sliding Average")
 plot(density(slidingAverage), main="Sliding Average Density")
 plot(density(workLoad), main="Total Work Load Average")
 
 
 dataTibble <- tibble(TimeSinceAugFirst = window:numDays, slidingWorkAverage = slidingAverage)
+
+
+ggplot(data = dataTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Total Daily Load Moving Average") + 
+  geom_point(mapping = aes(x=TimeSinceAugFirst, y=slidingWorkAverage)) + 
+  labs(x = "Days Since August Twenty First 2017", y = "Teams Total Daily Load")+ 
+  theme_bw()
+
 
 write.csv(dataTibble, "cleaned/slidingWorkAverage.csv")
