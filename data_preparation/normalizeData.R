@@ -83,11 +83,11 @@ for(id in playerIds)
 }
 
 
-normalWellnessData <- tibble(date = normDate, playerID = normPlayerIDs, normSoreness = normSoreness, 
+normalWellnessData <- tibble(TimeSinceAugFirst = normDate, playerID = normPlayerIDs, normSoreness = normSoreness, 
                             normFatigue = normFatigue, normDesire = normDesire, normIrritability = normIrritability,
                             normSleepHours = normSleepHours, normSleepQuality = normSleepQuality)
 
-write.csv(normalWellnessData, "cleaned/normalizedWellness.csv")
+write.csv(normalWellnessData, "cleaned/time_series_normalized_wellness.csv")
 
 
 plot()

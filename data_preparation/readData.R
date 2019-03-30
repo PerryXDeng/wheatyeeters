@@ -13,5 +13,11 @@ readWellnessData <- function()
 
 readRPEData <- function()
 {
-  as_tibble(read.csv("./cleaned/notnormalized_with_0Nan_rpe.csv"))
+  as_tibble(read.csv("./cleaned/time_series_notnormalized_with_continuousNan_rpe.csv"))
+}
+
+
+readNArpeData <- function()
+{
+  as_tibble(read.csv("./cleaned/time_series_notnormalized_with_continuousNan_rpe.csv"))
 }

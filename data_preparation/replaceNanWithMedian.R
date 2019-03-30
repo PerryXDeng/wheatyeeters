@@ -12,6 +12,10 @@ trainingData <- readRPEData()
 trainingData$Duration[is.na(trainingData$Duration)] <- median(trainingData$Duration, na.rm=TRUE)
 
 
+print(trainingData$Duration)
+
+
+
 #RPE
 trainingData$RPE[is.na(trainingData$RPE)] <- median(trainingData$RPE, na.rm=TRUE)
 
@@ -32,14 +36,21 @@ trainingData$ObjectiveRating[is.na(trainingData$ObjectiveRating)] <- median(trai
 trainingData$FocusRating[is.na(trainingData$FocusRating)] <- median(trainingData$FocusRating, na.rm=TRUE)
 
 
+
+# session load
+trainingData$SessionLoad[is.na(trainingData$SessionLoad)] <- median(trainingData$SessionLoad, na.rm=TRUE)
+
+# daily load
+trainingData$DailyLoad[is.na(trainingData$DailyLoad)] <- median(trainingData$DailyLoad, na.rm=TRUE)
+
+
 trainingData$RPE[is.na(trainingData$RPE)] <- median(trainingData$RPE, na.rm=TRUE)
 
-write.csv(as.data.frame(trainingData), "cleaned/time_series_rpw_naReplacedWithMedian.csv")
+write.csv(as.data.frame(trainingData), "cleaned/time_series_rpe_NA_ReplacedWithMedian.csv")
+
 
 
 head(as.data.frame(trainingData), 100)
-
-
 
 
 trainingData
