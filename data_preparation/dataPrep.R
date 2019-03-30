@@ -77,27 +77,17 @@ write.csv(compressedMetrics, "data/speedData.csv")
 
 
 
-
-
-
-rpeData <- read.csv("./data/rpe.csv")
-rpeDataTibble <- as_tibble(rpeData)
-
-
-gameData <- read.csv("data/games.csv")
-gameDataTibble <- as_tibble(gameData)
-
-
 wellnessData <- read.csv("./data/wellness_na.csv")
 wellnessDataTibble <- as_tibble(wellnessData)
 
 
-wellnesPlayer1 <- subset(wellnessDataTibble, PlayerID == 1)
 
-plot(wellnesPlayer1$Fatigue * wellnesPlayer1$Soreness * wellnesPlayer1$Irritability, wellnesPlayer1$SleepHours * wellnesPlayer1$SleepQuality)
+
+#plot(wellnesPlayer1$Fatigue * wellnesPlayer1$Soreness * wellnesPlayer1$Irritability, wellnesPlayer1$SleepHours * wellnesPlayer1$SleepQuality)
 
 
 wellnessCleaned <- as_tibble(read.csv("./cleaned/dirty_wellness.csv"))
+wellnesPlayer1 <- subset(wellnessCleaned, PlayerID == 1)
 
 
 ggplot(data = wellnessCleaned) + 
@@ -111,7 +101,7 @@ ggplot(data = wellnessCleaned) +
 
 ggplot(data = wellnessCleaned) + 
   theme(plot.title = element_text(hjust = 0.5)) + 
-  ggtitle("Hours of Sleep Box Plot") + 
+  ggtitle("Fatigue Box Plot") + 
   geom_boxplot(na.rm = T, mapping = aes(y=Fatigue, group = PlayerID), outlier.colour = "red", outlier.shape = 1) + 
   labs(group = "Player ID", y = "Fatigue Score") +
   coord_flip() +
@@ -136,6 +126,8 @@ ggplot(data = wellnessCleaned) +
   theme_bw()
 
 
+plot(density(wellnesPlayer1$SleepHours))
+
 max(wellnessCleaned$SleepHours, na.rm = T)
 min(wellnessCleaned$SleepHours, na.rm = T)
 
@@ -143,4 +135,84 @@ min(wellnessCleaned$SleepHours, na.rm = T)
 playerIdsWellness <-unique(wellnessCleaned$PlayerID)
 cat("Number of Players: ", length(playerIdsWellness), sep="")
 
+
+
+
+rpeData <- read.csv("./data/rpe.csv")
+rpeDataTibble <- as_tibble(rpeData)
+
+
+gameData <- read.csv("data/games.csv")
+gameDataTibble <- as_tibble(gameData)
+
+
+
+par(mfrow = c(4, 5))
+
+playerIdsWellness <- sort(playerIdsWellness)
+
+for(playerID in playerIdsWellness)
+{
+  if(!is.na(playerID) && playerID < 88)
+  {
+    #print(playerID)
+    #welnessTibble <- c()
+    
+    
+    welnessTibble <- subset(wellnessCleaned,PlayerID == playerID)
+    #print(length(welnessTibble$SleepHours))
+    
+    plot(density(welnessTibble$SleepHours, kernel = "gaussian", bw=0.5), main = paste("Player ", playerID, sep=""), xlab="Hours of Sleep")
+    
+    #lines(density(welnessTibble$SleepHours))
+  }
+}
+
+
+plot(density(wellnesPlayer1$SleepHours, kernel = "gaussian", bw=0.4), ylim=c(0,.7), xlab = "Hours of Sleep", main="Team's Sleep Distribution")
+for(playerID in playerIdsWellness)
+{
+  if(!is.na(playerID) && playerID < 88)
+  {
+    #print(playerID)
+    #welnessTibble <- c()
+    
+    welnessTibble <- subset(wellnessCleaned,PlayerID == playerID)
+
+    lines(density(welnessTibble$SleepHours,kernel = "gaussian", bw=0.4))
+  }
+}
+
+
+
+plot(density(wellnesPlayer1$Fatigue, kernel = "gaussian", bw=0.4), ylim=c(0,.7), xlab = "Self Reported Fatigue", main="Team's Fatigue Distribution")
+for(playerID in playerIdsWellness)
+{
+  if(!is.na(playerID) && playerID < 88)
+  {
+    #print(playerID)
+    #welnessTibble <- c()
+    
+    welnessTibble <- subset(wellnessCleaned,PlayerID == playerID)
+    
+    lines(density(welnessTibble$Fatigue,kernel = "gaussian", bw=0.4))
+  }
+}
+
+
+
+
+
+
 head(gpsData)
+
+
+
+
+
+
+
+
+
+# Normalize Wellness data
+
