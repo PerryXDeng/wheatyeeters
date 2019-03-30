@@ -4,6 +4,14 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 
 def k_days_into_future_regression(X, y, k, n0):
+  """
+  linear regression that returns the fitted weights as well as metrics
+  :param X: x timeseries dataframe (very clean, no unamed columns), multidimensional rows
+  :param y: y timeseries dataframe (very clean, no unamed columns), scalar rows
+  :param k: days predicting in advance
+  :param n0: ignoring the first n0 days
+  :return: intercept, slopes, correlation, mean squared error
+  """
   col = "TimeSinceAugFirst"
   inp = []
   out = []
