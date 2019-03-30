@@ -10,12 +10,6 @@ def vectorize_mult(column, dictionary, postfix, df, file=None):
 
 
 csv = pd.read_csv("data/rpe.csv")
-training = csv["Training"].unique()
-session = csv["SessionType"].unique()
-boms = csv["BestOutOfMyself"].unique()
-print(training)
-print(session)
-print(boms)
 vectorize_mult("Training", {"No": 0, "Yes": 1}, "", csv)
 
 mapping = {"Mobility/Recovery": 1, "Game": 0, "Skills": 0, "Conditioning": 0,
@@ -57,5 +51,5 @@ mapping[np.nan] = 1
 vectorize_mult('BestOutOfMyself', mapping, "Unknown", csv)
 mapping[np.nan] = 0
 
-print(csv.isnull().sum*())
-csv.to_csv("cleaned/notnormalized_clean_rpe.csv")
+print(csv.isnull().sum())
+csv.to_csv("cleaned/notnormalized_with_continuousNan_rpe.csv")
