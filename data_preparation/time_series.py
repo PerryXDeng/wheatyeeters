@@ -21,8 +21,8 @@ def timeframes():
   start_end_times("data/wellness.csv")
 
 
-def normalize_time_series(filename, start):
-  df = pd.read_csv(filename)
+def normalize_time_series(path, filename, start):
+  df = pd.read_csv(path)
   columnname = "Date"
   dt = pd.to_datetime(df[columnname], format="%Y-%m-%d")
   df["TimeSinceAugFirst"] = (dt - start).dt.days
@@ -30,4 +30,7 @@ def normalize_time_series(filename, start):
 
 
 start = start_end_times("data/rpe.csv")
-normalize_time_series("cleaned/rpe.csv", start)
+normalize_time_series("cleaned/dirty_wellness.csv", "dirty_wellness.csv", start)
+normalize_time_series("cleaned/dirty_wellness_na.csv", "dirty_wellness_na.csv", start)
+normalize_time_series("cleaned/notnormalized_with_0Nan_rpe.csv", "notnormalized_with_0Nan_rpe.csv", start)
+normalize_time_series("cleaned/notnormalized_with_continuousNan_rpe.csv", "notnormalized_with_continuousNan_rpe.csv", start)
