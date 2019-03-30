@@ -1,0 +1,22 @@
+Team:
+    1.
+    x - normFatigue, TimeSince
+    y - normSoreness
+    r2 - 0.16830803694995466
+
+    2.
+    x - normFatigue, TimeSince
+    y - normDesire
+    r2 - 0.1722466278587138
+
+    3.
+    x - normFatigue, TimeSince
+    y - normIrritability
+    r2 - 0.09563459728506452
+
+    4.
+    x - normSleepHours, TimeSince
+    y - normSleepQualiyt
+    r2 - 0.09717095676693188
+
+    5.

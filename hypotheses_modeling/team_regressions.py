@@ -33,10 +33,28 @@ def k_days_into_future_regression(X, y, k, n0):
   return regr.intercept_, regr.coef_, r2, mse
 
 
+def standard_lr(x, y):
+  regr = linear_model.LinearRegression()
+  regr.fit(x, y)
+  predictions = regr.predict(x)
+  mse = mean_squared_error(y, predictions) / (len(y) - 2)
+  r2 = r2_score(y, predictions)
+  return regr.intercept_, regr.coef_, r2, mse
+
+
 def main():
-  fatigueSums = pd.read_csv("fatigue_total_sum.csv")
-  performance = pd.read_csv("../data_preparation/cleaned/expSmoothWorkAndFatigueData.csv", index_col=0).drop(columns=["totalWork", "averageWorkLoad", "smoothedFatigueData"])
-  print(k_days_into_future_regression(fatigueSums, performance, 0, 1))
+  # fatigueSums = pd.read_csv("fatigue_total_sum.csv")
+  # workMovingAverage21 = pd.read_csv("21DaySlidingWorkAverage.csv", index_col=0)
+  # print(k_days_into_future_regression(workMovingAverage21, fatigueSums, 0, 21))
+
+
+  wellness = pd.read_csv("../data_preparation/cleaned/time_series_normalized_wellness_menstruation.csv")
+
+  wellness = wellness.fillna(0)
+  x = wellness[['normSoreness', 'TimeSinceAugFirst']]
+  y = wellness['normFatigue']
+  print(wellness.isnull().sum())
+  print(standard_lr(x, y))
 
 
 if __name__ == "__main__":
