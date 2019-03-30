@@ -31,12 +31,10 @@ plot(dayList, workLoad, main="Daily Total Work Load")
 
 slidingAverage <- c()
 
-window <- 21 - 1
+window <- 7 - 1
 for(day in window:numDays)
 {
-  print(length(workLoad[c((day-window):day)]))
   windowAverage <- mean(workLoad[c((day-window):day)])
-  
   slidingAverage <- c(slidingAverage, windowAverage)
 }
 
@@ -52,10 +50,10 @@ dataTibble <- tibble(TimeSinceAugFirst = window:numDays, slidingWorkAverage = sl
 
 ggplot(data = dataTibble) + 
   theme(plot.title = element_text(hjust = 0.5)) + 
-  ggtitle("Team's Total Daily Load Moving Average") + 
+  ggtitle("Team's 7 Day Moving Average") + 
   geom_point(mapping = aes(x=TimeSinceAugFirst, y=slidingWorkAverage)) + 
-  labs(x = "Days Since August Twenty First 2017", y = "Teams Total Daily Load")+ 
+  labs(x = "Days Since August Seventh 2017", y = "Teams Total Daily Load")+ 
   theme_bw()
 
 
-write.csv(dataTibble, "cleaned/slidingWorkAverage.csv")
+write.csv(dataTibble, "cleaned/slidingWorkAverageSevenDay.csv")
