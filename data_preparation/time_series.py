@@ -30,4 +30,4 @@ def normalize_time_series(path, filename, start):
 
 
 start = start_end_times("data/rpe.csv")
-normalize_time_series("data/games_ranked.csv", "games_ranked.csv", start)
+normalize_time_series("cleaned/normalizedWellness.csv", "normalizedWellness.csv", start)
