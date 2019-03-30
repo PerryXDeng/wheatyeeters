@@ -47,5 +47,34 @@ class WellnessCSV:
         df.to_csv(self.end)
 
 
-cls = WellnessCSV()
-cls.vectorize()
+class FatigueSum:
+    def __init__(self):
+        self.file = "cleaned/time_series_normalized_wellness.csv"
+        self.end = "cleaned/fatigue_total_sum.csv"
+
+    def calculate(self):
+        df = pd.read_csv(self.file)
+
+        # get some of the fatigue for a particular date
+        diction = dict()
+        dates = df["TimeSinceAugFirst"].unique()
+        dates = set(dates)
+        dates = list(dates)
+
+        # for each date, get unique data and get calculation
+        for date in dates:
+            pdf = df[df["TimeSinceAugFirst"] == date]
+            num_players = len(pdf["playerID"].unique())
+            fatigue_sum = pdf["normFatigue"].sum()
+            result = fatigue_sum / num_players
+            diction[date] = result
+
+        # Converting
+        dates = diction.keys()
+        values = diction.values()
+
+        final_df = pd.DataFrame()
+        final_df["TimeSinceAugFirst"] = dates
+        final_df["fatigueSum"] = values
+        final_df.to_csv(self.end)
+
