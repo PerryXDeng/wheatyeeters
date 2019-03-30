@@ -32,7 +32,6 @@ def k_days_into_future_regression(X, y, k, n0):
 def main():
   fatigueSums = pd.read_csv("fatigue_total_sum.csv")
   workMovingAverage21 = pd.read_csv("21DaySlidingWorkAverage.csv", index_col=0)
-  performance = pd.read_csv("time_series_days_ranked.csv", index_col=0)
   print(k_days_into_future_regression(workMovingAverage21, fatigueSums, 0, 21))
 
 
