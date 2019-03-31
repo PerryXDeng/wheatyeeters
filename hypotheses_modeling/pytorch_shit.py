@@ -13,8 +13,7 @@ class Net(nn.Module):
 
     def forward(self, x):
         x = torch.sigmoid(self.fc1(x))
-        x = torch.sigmoid(self.fc2(x))
-        return x
+        return self.fc2(x)
 
 
 def get_argmax(array):
@@ -25,9 +24,7 @@ def get_argmax(array):
             max = array[i]
             index = i
 
-    one_hot = [0, 0, 0, 0]
-    one_hot[index] = 1
-    return one_hot
+    return [index]
 
 
 def get_trainset(dataset, k, n0, x_columns, y_columns):
@@ -65,7 +62,7 @@ def get_trainset(dataset, k, n0, x_columns, y_columns):
             y.append(yt)
 
     x = torch.FloatTensor(x)
-    y = np.array(y)
+    y = torch.LongTensor(y)
     return x, y
 
 
@@ -75,19 +72,18 @@ def time_series_sigmoid_classification(steps, dataset, k, n0, x_columns, y_colum
   loss = nn.CrossEntropyLoss()
 
   for step in range(steps):
+      optimizer.zero_grad()
+
       x, y = get_trainset(dataset, k, n0, x_columns, y_columns)
-
       pred = net(x)
-      pred = pred.detach().numpy()
-
-      for row in range(len(pred)):
-        pred[row] = get_argmax(pred[row])
-
-      net_loss = loss(pred, y)
+      net_loss = loss(pred, torch.max(y, 1)[1])
       net_loss.backward()
       optimizer.step()
 
       print("Loss at Step {}: {}".format(step, net_loss))
+
+  x, y = get_trainset(dataset, k, n0, x_columns, y_columns)
+  accuracy(net, x, y)
 
 
 def accuracy(net, x, y):
@@ -106,6 +102,7 @@ def accuracy(net, x, y):
 
     accuracy = (correct / total) * 100
     print("Accuracy for set: {}%".format(accuracy))
+    torch.save(net, "model.ckpt")
 
 
 def main():
