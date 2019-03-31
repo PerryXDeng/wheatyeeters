@@ -1,0 +1,28 @@
+Team:
+    1.
+    x - normFatigue, TimeSince
+    y - normSoreness
+    r2 - 0.16830803694995466
+
+    2.
+    x - normFatigue, TimeSince
+    y - normDesire
+    r2 - 0.1722466278587138
+
+    3.
+    x - normFatigue, TimeSince
+    y - normIrritability
+    r2 - 0.09563459728506452
+
+    4.
+    x - normSleepHours, TimeSince
+    y - normSleepQualiyt
+    r2 - 0.09717095676693188
+
+    5.
+
+Perry:
+7 day moving average team workload - normalized team fatigue: 0.0006
+21 day moving average team workload - normalized team fatigue: 0.0024
+normalized team fatigue - game day performance: 0.0696
+normalized team fatigue - paper smoothed workload fatigue: 0.0324
