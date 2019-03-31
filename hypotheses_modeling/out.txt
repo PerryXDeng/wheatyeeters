@@ -1,0 +1,8 @@
+Epoch 1/50, mean_squared_error: 90.4998
+Epoch 11/50, mean_squared_error: 1.0265
+Epoch 21/50, mean_squared_error: 0.9604
+Epoch 31/50, mean_squared_error: 0.8671
+Epoch 41/50, mean_squared_error: 0.7838
+r2, 0.07949744624446509
+slopes, 0.03589787,-0.03472298, 0.24109702, -0.10143519
+intercept, -0.8960594
