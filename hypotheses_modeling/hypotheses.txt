@@ -21,8 +21,15 @@ Team:
 
     5.
 
+
+Individual:
+    Player 1 - fatigue + day / soreness
+        lr - 0.24677741789096985
+        pr - 0.32119826926167405
+
 Perry:
 7 day moving average team workload - normalized team fatigue: 0.0006
 21 day moving average team workload - normalized team fatigue: 0.0024
 normalized team fatigue - game day performance: 0.0696
 normalized team fatigue - paper smoothed workload fatigue: 0.0324
+
