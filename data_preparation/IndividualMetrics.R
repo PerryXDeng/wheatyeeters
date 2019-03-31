@@ -46,6 +46,7 @@ unknownCol <- c()
 
 
 
+desireCol <- c()
 
 
 for(day in dayList)
@@ -73,6 +74,7 @@ for(day in dayList)
     
     if(length(wellnessDay$SleepHours) > 0)
     {
+      desireCol <- c(desireCol, wellnessDay$Desire)
       fatigueRawCol <- c(fatigueRawCol, mean(wellnessDay$Fatigue, na.rm =T))
       sleepQualityCol <- c(sleepQualityCol, mean(wellnessDay$SleepQuality, na.rm = T))
       sleepHoursCol <- c(sleepHoursCol, sum(wellnessDay$SleepHours, na.rm = T))
@@ -80,6 +82,7 @@ for(day in dayList)
     }
     else
     {
+      desireCol <- c(desireCol, median(wellnessData$Desire))
       sleepQualityCol <- c(sleepQualityCol, median(wellnessData$SleepQuality, na.rm = T))
       sleepHoursCol <- c(sleepHoursCol, median(wellnessData$SleepHours))
       fatigueRawCol <- c(fatigueRawCol, median(wellnessData$Fatigue))
@@ -160,7 +163,8 @@ massiveTibble <- tibble(day = dayCol,
                         BestOutOfMyselfNotAtAll = notatAllCol,
                         BestOutOfMyselfAbsolutely = absCol,
                         BestOutOfMyselfSomewhat = somewhatCol,
-                        BestOutOfMyselfUnknown = unknownCol)
+                        BestOutOfMyselfUnknown = unknownCol,
+                        desire = desireCol)
 
 write.csv(massiveTibble, "cleaned/personal.csv")
 
@@ -194,7 +198,7 @@ ggplot(data = massiveTibble) +
 ggplot(data = massiveTibble) + 
   theme(plot.title = element_text(hjust = 0.5)) + 
   ggtitle("Team's Percieved Fatigue") + 
-  geom_point(mapping = aes(x=day, y=fatigue)) + 
+  geom_point(mapping = aes(x=day, y=fatigueNormSliding)) + 
   labs(x = "Days Since August First 2017", y = "Teams Fatigue")+ 
   theme_bw()
 
