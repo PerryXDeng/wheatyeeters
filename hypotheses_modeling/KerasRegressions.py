@@ -144,14 +144,14 @@ def time_series_linear_regression(dataset, k, n0, x_columns, y_columns):
     tf.keras.layers.Flatten(input_shape=[input_shape]),
     tf.keras.layers.Dense(output_shape)
   ])
-  model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
-  model.fit(x, y, epochs=50)
-  loss, _ = model.evaluate(x, y)
-  print(loss)
+  model.compile(optimizer='adam', loss='mean_squared_error', metrics=[tf.keras.metrics.mean_squared_error])
+  model.fit(x, y, epochs=50, verbose=2)
   pred = model.predict(x)
   r2 = r2_(y, pred)
-  print(r2)
-  return model.get_weights()
+  hard_pred = model.predict(x[0])
+  hard_out = np.matmul(x[0], [0.03589787, -0.03472298, 0.24109702, -0.10143519]) - 0.890594
+  print(hard_pred, hard_out, y[0])
+  return r2, model.get_weights()
 
 
 def time_series_dnn_regressions(dataset, k, n0, x_columns, y_columns):
@@ -194,24 +194,26 @@ def time_series_dnn_regressions(dataset, k, n0, x_columns, y_columns):
     tf.keras.layers.Dense(32, activation=tf.nn.softmax),
     tf.keras.layers.Dense(output_shape)
   ])
-  model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
-  model.fit(x, y, epochs=100, verbose=0)
+  model.compile(optimizer='adam', loss='mean_squared_error', metrics=[tf.keras.metrics.mean_squared_error])
+  model.fit(x, y, epochs=100, verbose=2)
   loss, accuracy = model.evaluate(x, y)
-  print(loss, accuracy)
   pred = model.predict(x)
   r2 = r2_(y, pred)
-  print(r2)
-  return model.get_weights()
+  return r2, model.get_weights()
 
 
 def main():
   filename = "personal.csv"
   df = pd.read_csv(filename)
-  x = ["day", "playerID", "DailyLoadSliding", "sleepQuality"]
+  x = ["day", "playerID", "sleepHoursSliding", "sleepHours", "sleepQuality", "acuteChronicRatio"]
   y = ["day", "playerID", "fatigueNorm"]
   k = 0
   n0 = 30
-  weights = time_series_linear_regression(df, k, n0, x, y)
+  r2, weights =  time_series_linear_regression(df, k, n0, x, y)
+  print("r2")
+  print(r2)
+  print("weights")
+  print(weights)
 
 
 if __name__ == "__main__":
