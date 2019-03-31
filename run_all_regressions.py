@@ -48,9 +48,14 @@ def standard_lr(x, y):
 
 
 def poly_regression(x, y, degree):
+
+  # Reshapes the models to be able to run regression on them
+  x = x.reshape(-1, 1)
+  y = y.reshape(-1, 1)
+
   # Polynomial regression with nth degree, gives back rmse and r2
   polynomial_features = PolynomialFeatures(degree=degree)
-  x_poly = polynomial_features.fist_transform(x)
+  x_poly = polynomial_features.fit_transform(x)
 
   model = linear_model.LinearRegression()
   model.fit(x_poly, y)
@@ -61,42 +66,25 @@ def poly_regression(x, y, degree):
   return rmse, r2
 
 
-def run_all_linears():
-
-    # Reads in the neccessary csv file
-    df = pd.read_csv('data_preparation/cleaned/time_series_normalized_wellness_menstruation.csv')
-    regr = linear_model.LinearRegression()
-    for i in range(4, 11):
-        for j in range(1, 11 - i):
-            mat = df[[df.columns[i], df.columns[i + j]]].values
-            regr.intercept_, regr.coef_, r2, mse = standard_lr(mat[:, 0], mat[:, 1])
-            plt.figure(figsize=(6, 6))
-            plt.xlabel(df.columns[i])
-            plt.ylabel(df.columns[i + j])
-            plt.title('r2: ' + str(r2))
-            plt.scatter(mat[:, 0], mat[:, 1])
-            plt.savefig('wellness_linear_regressions/' + df.columns[i] + '_vs_' + df.columns[i + j] + '.png')
-            plt.close()
-
-
 def run_all_polynomials():
     # Reads in the neccessary csv file
-    df = pd.read_csv('data_preparation/cleaned/time_series_normalized_wellness_menstruation.csv')
+    df = pd.read_csv('data_preparation/cleaned/personal.csv')
     regr = linear_model.LinearRegression()
-    for i in range(4, 11):
-        for j in range(1, 11 - i):
+    print("xVal, yVal, degree, r2, rmse")
+    for i in range(3, 14):
+        for j in range(1, 14 - i):
             mat = df[[df.columns[i], df.columns[i + j]]].values
-            for d in range(2, 5):
+            for d in range(1, 6):
                 rmse, r2 = poly_regression(mat[:, 0], mat[:, 1], d)
                 plt.figure(figsize=(6, 6))
                 plt.xlabel(df.columns[i])
                 plt.ylabel(df.columns[i + j])
                 plt.title('r2: ' + str(r2) + 'degree: ' + str(d))
                 plt.scatter(mat[:, 0], mat[:, 1])
-                plt.savefig('wellness_poly_regressions/' + df.columns[i] + '_vs_' + df.columns[i + j] + '_' + str(d) + '_degree.png')
-                print(df.columns[i] + '_vs_' + df.columns[i + j] + '_degree_' + str(d) + '_r2=' + str(r2) + '_rmse=' + str(rmse))
+                plt.savefig('personal_regression_info/' + df.columns[i] + '_vs_' + df.columns[i + j] + '_' + str(d) + '_degree.png')
+                print(df.columns[i] + ', ' + df.columns[i + j] + ', ' + str(d) + ', ' + str(r2) + ', ' + str(rmse))
                 plt.close()
 
 
-run_all_linears()
+# run_all_linears()
 run_all_polynomials()
