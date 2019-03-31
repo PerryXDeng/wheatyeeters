@@ -24,7 +24,9 @@ def get_argmax(array):
             max = array[i]
             index = i
 
-    return [index]
+    one_hot = [0,0,0,0]
+    one_hot[index] = 1
+    return one_hot
 
 
 def get_trainset(dataset, k, n0, x_columns, y_columns):
@@ -71,6 +73,9 @@ def time_series_sigmoid_classification(steps, dataset, k, n0, x_columns, y_colum
   optimizer = optim.Adam(net.parameters(), lr=.001)
   loss = nn.CrossEntropyLoss()
 
+  x, y = get_trainset(dataset, k, n0, x_columns, y_columns)
+  accuracy(net, x, y)
+
   for step in range(steps):
       optimizer.zero_grad()
 
@@ -89,6 +94,8 @@ def time_series_sigmoid_classification(steps, dataset, k, n0, x_columns, y_colum
 def accuracy(net, x, y):
     pred = net(x)
     pred = pred.detach().numpy()
+    for row in range(len(pred)):
+        pred[row] = get_argmax(pred[row])
 
     total = len(pred)
     correct = 0
@@ -110,7 +117,7 @@ def main():
   df = pd.read_csv(filename)
   x = ["day", "playerID", "fatigueSliding"]
   y = ["day", "playerID", "BestOutOfMyselfAbsolutely", "BestOutOfMyselfSomewhat", "BestOutOfMyselfNotAtAll", "BestOutOfMyselfUnknown"]
-  time_series_sigmoid_classification(100, df, 0, 30, x, y)
+  time_series_sigmoid_classification(2, df, 0, 30, x, y)
 
 
 if __name__ == '__main__':
