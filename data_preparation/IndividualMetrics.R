@@ -1,4 +1,5 @@
 source("readData.R")
+source("exponentialSmoothing.R")
 
 library(tidyverse)
 
@@ -6,6 +7,9 @@ library(tidyverse)
 RPEData <-readNArpeData()
 wellnessData <- readWellnessData()
 normalizedWellnessData <- readNormalizedMetrics()
+
+
+
 RPEData
 
 
@@ -130,17 +134,26 @@ dailyLoadCol[is.na(dailyLoadCol)] <- 0
 acuteChronicRatioCol[is.na(acuteChronicRatioCol)] <- 0
 
 
+accuteFatigueSliding <- slidingWindowSmooth(acuteChronicRatioCol)
+
 
 massiveTibble <- tibble(day = dayCol,
                         playerID = playerid,
                         DailyLoad = dailyLoadCol,
+                        DailyLoadSliding = slidingWindowSmooth(DailyLoad),
                         acuteChronicRatio = acuteChronicRatioCol,
+                        acuteChronicRatioSliding = slidingWindowSmooth(acuteChronicRatioCol),
                         trainDuration = trainDuration,
+                        trainDurationSliding = slidingWindowSmooth(trainDuration),
                         sleepHours = sleepHoursCol,
+                        sleepHoursSliding = slidingWindowSmooth(sleepHours),
                         fatigue = fatigueRawCol,
+                        fatigueSliding = slidingWindowSmooth(fatigue),
                         sleepQuality = sleepQualityCol,
                         soreness = sorenessCol,
+                        sorenessSliding = slidingWindowSmooth(soreness),
                         fatigueNorm = normFatCol,
+                        fatigueNormSliding = slidingWindowSmooth(fatigueNorm),
                         sorenessNorm = normSoreCol,
                         sleepHoursNorm = normSleepHours,
                         sleepQualityNorm = normSleepQuality,
@@ -150,3 +163,53 @@ massiveTibble <- tibble(day = dayCol,
                         BestOutOfMyselfUnknown = unknownCol)
 
 write.csv(massiveTibble, "cleaned/personal.csv")
+
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Normalized Soreness Box Plots") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=sorenessNorm, group = playerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Normalized Soreness Values") +
+  coord_flip() +
+  theme_bw()
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Normalized Sleep Quality Box Plots") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=sleepQualityNorm, group = playerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Normalized Sleep Quality") +
+  coord_flip() +
+  theme_bw()
+
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Soreness Box Plots") + 
+  geom_boxplot(na.rm = T, mapping = aes(y=sleepQuality, group = playerID), outlier.colour = "red", outlier.shape = 1) + 
+  labs(group = "Player ID", y = "Sleep Quality") +
+  coord_flip() +
+  theme_bw()
+
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Percieved Fatigue") + 
+  geom_point(mapping = aes(x=day, y=fatigue)) + 
+  labs(x = "Days Since August First 2017", y = "Teams Fatigue")+ 
+  theme_bw()
+
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Percieved Fatigue") + 
+  geom_point(mapping = aes(x=day, y=sorenessSliding)) + 
+  labs(x = "Days Since August First 2017", y = "Accute Fatugue ")+ 
+  theme_bw()
+
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Percieved Fatigue") + 
+  geom_point(mapping = aes(x=sleepQuality, y=fatigueNorm)) + 
+  labs(x = "Days Since August First 2017", y = "Accute Fatugue ") + 
+  theme_bw()
