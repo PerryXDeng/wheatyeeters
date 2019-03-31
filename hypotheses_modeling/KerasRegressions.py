@@ -49,7 +49,7 @@ def time_series_sigmoid_classification(X, Y, k, n0, x_columns, y_columns):
   return model.get_weights()
 
 
-def time_series_sigmoid_classification(X, Y, k, n0, x_columns, y_columns):
+def time_series_dnn_classification(X, Y, k, n0, x_columns, y_columns):
   inp = X[x_columns]
   out = Y[y_columns]
   col = "day"
