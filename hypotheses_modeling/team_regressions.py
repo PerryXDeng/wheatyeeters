@@ -60,12 +60,24 @@ def poly_regression(x, y, degree):
 
 
 def main():
+  file = open("ryan_regressions.txt", 'w')
   player = pd.read_csv("../data_preparation/cleaned/personal.csv", index_col=0)
-  player = player[player['playerID'] == 1]
-  x = player[['fatigueNorm', 'day']]
-  y = player['sorenessNorm']
-  print(standard_lr(x, y))
-  print(poly_regression(x, y, 5))
+
+  for name, value in player.iteritems():
+    if name == "day":
+      continue
+
+    for j in range(1, 17):
+      ply = player[player['playerID'] == j]
+      x = ply[['fatigueNorm', 'day']]
+      y = ply[name]
+
+      lr = standard_lr(x, y)
+      poly = poly_regression(x, y, 3)
+      if .9 > lr[2] > .4 or .9 > poly[1] > .4:
+        file.write("Player {} for {}\n".format(j, name))
+        file.write("{}\n".format(lr))
+        file.write("{}\n\n".format(poly))
 
 
 if __name__ == "__main__":
