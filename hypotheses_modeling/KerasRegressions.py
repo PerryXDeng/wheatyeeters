@@ -94,7 +94,7 @@ def time_series_dnn_classification(dataset, k, n0, x_columns, y_columns):
   y = np.array(y)
   model = tf.keras.Sequential([
     tf.keras.layers.Dense(32, input_dim=input_shape,activation=tf.nn.softmax),
-    tf.keras.layers.Dense(output_shape, activation=tf.nn.softmax)
+    tf.keras.layers.Dense(output_shape, input_dim=32, activation=tf.nn.softmax)
   ])
   model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy', 'categorical_accuracy'])
   print(output_shape)
@@ -195,7 +195,7 @@ def time_series_dnn_regressions(dataset, k, n0, x_columns, y_columns):
     tf.keras.layers.Dense(output_shape)
   ])
   model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
-  model.fit(x, y, epochs=50)
+  model.fit(x, y, epochs=100, verbose=0)
   loss, accuracy = model.evaluate(x, y)
   print(loss, accuracy)
   pred = model.predict(x)
@@ -207,11 +207,11 @@ def time_series_dnn_regressions(dataset, k, n0, x_columns, y_columns):
 def main():
   filename = "personal.csv"
   df = pd.read_csv(filename)
-  x = ["day", "playerID", "fatigueSliding"]
-  y = ["day", "playerID", "BestOutOfMyselfAbsolutely", "BestOutOfMyselfSomewhat", "BestOutOfMyselfNotAtAll", "BestOutOfMyselfUnknown"]
+  x = ["day", "playerID", "DailyLoadSliding", "sleepQuality"]
+  y = ["day", "playerID", "fatigueNorm"]
   k = 0
   n0 = 30
-  weights = time_series_dnn_classification(df, k, n0, x, y)
+  weights = time_series_linear_regression(df, k, n0, x, y)
 
 
 if __name__ == "__main__":
