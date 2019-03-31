@@ -23,10 +23,9 @@ for(day in dayList)
   averageWorkLoad <- c(averageWorkLoad, mean(daylyActivities$SessionLoad, na.rm = T))
   workLoad <- c(workLoad, sum(daylyActivities$SessionLoad, na.rm = T))
 }
+
 plot(dayList, averageWorkLoad, main="Average Work Load")
 plot(dayList, workLoad, main="Daily Total Work Load")
-
-
 
 
 
@@ -49,8 +48,6 @@ for(day in dayList)
 }
 
 plot(dayList, smoothedFatigue)
-
-
 
 
 
@@ -79,10 +76,12 @@ for(day in dayList)
 plot(dayList, smoothedFatigueData)
 
 
-workTibble <- tibble(day = dayList, totalWork = workLoad, 
+workTibble <- tibble(day = dayList, totalWork = workLoad,
                      averageWorkLoad = averageWorkLoad, 
                      smoothedWork = smoothedWork,
                      smoothedFatigueData = smoothedFatigueData)
+
+plot(workTibble$totalWork, fatigueData$fatigueSum[-1])
 
 workGraph <- ggplot(data = workTibble) + 
   theme(plot.title = element_text(hjust = 0.5)) + 
@@ -99,6 +98,14 @@ fatGraph <- ggplot(data = workTibble) +
   theme_bw()
 
 
+ggplot(data = workTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Percieved Fatigue") + 
+  geom_point(mapping = aes(x=smoothedWork, y=smoothedFatigueData)) + 
+  labs(x = "Smoothed Work Per Day", y = "Teams Average Normalized Fatigue")+ 
+  theme_bw()
+
+
 for(gameDay in games$Date)
 {
   fatGraph <- fatGraph + geom_vline(xintercept = gameDay, linetype="dotted", 
@@ -106,10 +113,13 @@ for(gameDay in games$Date)
   workGraph <- workGraph + geom_vline(xintercept = gameDay, linetype="dotted", 
                                         color = "blue", size=1.0)
 }
+
+
+
 workGraph
 fatGraph
 
-write.csv(dataTibble, "cleaned/expSmoothWorkAndFatigueData.csv")
+write.csv(workTibble, "cleaned/expSmoothWorkAndFatigueData.csv")
 
 
 

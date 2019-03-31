@@ -6,7 +6,7 @@ fatigueFunction <- function(workLoad, index)
   }
   else
   {
-    return(workLoad[index] + 0.7*fatigueFunction(workLoad, index -1))
+    return(workLoad[index] + (exp(1)^(-1/15))**fatigueFunction(workLoad, index -1))
   }
 }
 
@@ -23,6 +23,21 @@ smoothVector <- function(dataV)
 }
 
 
-smoothVector(c(1,2,3,4))
 
-plot(1:100, smoothVector(1:100))
+slidingWindowSmooth <- function(dataV, windowSize = 7)
+{
+  dataNew <- c()
+  
+  
+  for(i in 1:windowSize)
+  {
+    dataNew <- c(dataNew, mean(dataV[c(1:i)]))
+  }
+  
+  
+  for(i in (windowSize + 1):length(dataV))
+  {
+    dataNew <- c(dataNew, mean(dataV[(i-7):i]))
+  }
+  dataNew
+}
