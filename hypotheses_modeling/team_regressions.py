@@ -1,4 +1,6 @@
 from sklearn import linear_model
+from sklearn.preprocessing import PolynomialFeatures
+import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
 
@@ -34,6 +36,7 @@ def k_days_into_future_regression(X, y, k, n0):
 
 
 def standard_lr(x, y):
+  # Standard linear regression formula, gives back params and r2
   regr = linear_model.LinearRegression()
   regr.fit(x, y)
   predictions = regr.predict(x)
@@ -42,19 +45,27 @@ def standard_lr(x, y):
   return regr.intercept_, regr.coef_, r2, mse
 
 
+def poly_regression(x, y, degree):
+  # Polynomial regression with nth degree, gives back rmse and r2
+  polynomial_features = PolynomialFeatures(degree=degree)
+  x_poly = polynomial_features.fit_transform(x)
+
+  model = linear_model.LinearRegression()
+  model.fit(x_poly, y)
+  y_poly_pred = model.predict(x_poly)
+
+  rmse = np.sqrt(mean_squared_error(y, y_poly_pred))
+  r2 = r2_score(y, y_poly_pred)
+  return rmse, r2
+
+
 def main():
-  # fatigueSums = pd.read_csv("fatigue_total_sum.csv")
-  # workMovingAverage21 = pd.read_csv("21DaySlidingWorkAverage.csv", index_col=0)
-  # print(k_days_into_future_regression(workMovingAverage21, fatigueSums, 0, 21))
-
-
-  wellness = pd.read_csv("../data_preparation/cleaned/time_series_normalized_wellness_menstruation.csv")
-
-  wellness = wellness.fillna(0)
-  x = wellness[['normSoreness', 'TimeSinceAugFirst']]
-  y = wellness['normFatigue']
-  print(wellness.isnull().sum())
+  player = pd.read_csv("../data_preparation/cleaned/personal.csv", index_col=0)
+  player = player[player['playerID'] == 1]
+  x = player[['fatigueNorm', 'day']]
+  y = player['sorenessNorm']
   print(standard_lr(x, y))
+  print(poly_regression(x, y, 5))
 
 
 if __name__ == "__main__":
