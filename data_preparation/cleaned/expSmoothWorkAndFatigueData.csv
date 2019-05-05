@@ -1,4 +1,4 @@
-"","TimeSinceAugFirst","totalWork","averageWorkLoad","smoothedWork","smoothedFatigueData"
+"","day","totalWork","averageWorkLoad","smoothedWork","smoothedFatigueData"
 "1",0,4855,255.526315789474,4855,0.734457489003587
 "2",1,1380,138,5921.8864123285,1.17226558337237
 "3",2,6030,231.923076923077,11569.9661032971,1.37713723445689

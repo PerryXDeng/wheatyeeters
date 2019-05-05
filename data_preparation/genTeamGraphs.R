@@ -26,9 +26,6 @@ for(day in dayList)
   workLoad <- c(workLoad, sum(daylyActivities$SessionLoad, na.rm = T))
 }
 
-plot(dayList, averageWorkLoad, main="Average Work Load")
-plot(dayList, workLoad, main="Daily Total Work Load")
-
 
 
 fatigueFunction <- function(workLoad, index)
@@ -48,8 +45,6 @@ for(day in dayList)
 {
   smoothedWork <- c(smoothedWork, fatigueFunction(workLoad, day + 1))
 }
-
-plot(dayList, smoothedFatigue)
 
 
 
@@ -111,80 +106,12 @@ ggplot(data = workTibble) +
 for(gameDay in games$Date)
 {
   fatGraph <- fatGraph + geom_vline(xintercept = gameDay, linetype="dotted", 
-                                      color = "blue", size=1.0)
+                                    color = "blue", size=1.0)
   workGraph <- workGraph + geom_vline(xintercept = gameDay, linetype="dotted", 
-                                        color = "blue", size=1.0)
+                                      color = "blue", size=1.0)
 }
 
 
 
 workGraph
 fatGraph
-
-write.csv(workTibble, "cleaned/expSmoothWorkAndFatigueData.csv")
-
-
-
-slidingAverage <- c()
-
-window <- 31 - 1
-for(day in window:numDays)
-{
-  windowAverage <- mean(workLoad[c((day-window):day)])
-  slidingAverage <- c(slidingAverage, windowAverage)
-}
-
-
-
-plot(window:numDays, slidingAverage, main="Sliding Average")
-plot(density(slidingAverage), main="Sliding Average Density")
-plot(density(workLoad), main="Total Work Load Average")
-
-
-dataTibble <- tibble(TimeSinceAugFirst = window:numDays, slidingWorkAverage = slidingAverage)
-
-
-workGraph <- ggplot(data = dataTibble) + 
-  theme(plot.title = element_text(hjust = 0.5)) + 
-  ggtitle("Team's 7 Day Moving Average") + 
-  geom_point(mapping = aes(x=TimeSinceAugFirst, y=slidingWorkAverage)) + 
-  labs(x = "Days Since August Seventh 2017", y = "Teams Total Daily Load")+ 
-  theme_bw()
-
-
-for(gameDay in games$Date)
-{
-  workGraph <- workGraph + geom_vline(xintercept = gameDay, linetype="dotted", 
-                                      color = "blue", size=1.0)
-}
-
-workGraph
-
-
-write.csv(dataTibble, "cleaned/slidingWorkAverageSevenDay.csv")
-
-
-################################      Wellness Data      ###################################
-
-
-
-graphingTib <- tibble(slidingAverage = slidingAverage, days = window:dayNum)
-
-fGraph <- ggplot(data = graphingTib) + 
-  theme(plot.title = element_text(hjust = 0.5)) + 
-  ggtitle("Team's Average Normalized Fatigue") + 
-  geom_point(mapping = aes(x=days, y=slidingAverage)) + 
-  labs(x = "Days Since August Twenty First 2017", y = "Teams Average Normalized Fatigue")+ 
-  theme_bw()
-
-
-for(gameDay in games$Date)
-{
-  fGraph <- fGraph + geom_vline(xintercept = gameDay, linetype="dotted", 
-                                      color = "blue", size=1.0)
-}
-
-fGraph
-
-plot(density(slidingAverage))
-plot(window:dayNum, slidingAverage)

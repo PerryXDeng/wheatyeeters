@@ -169,6 +169,90 @@ massiveTibble <- tibble(day = dayCol,
 write.csv(massiveTibble, "cleaned/personal.csv")
 
 
+library(devtools)
+
+source_gist("524eade46135f6348140")
+## Mini Graphs 
+
+
+
+library(devtools)
+source_gist("524eade46135f6348140")
+
+
+# first section
+
+ggplot(data = massiveTibble, aes(x = DailyLoad, y = fatigueNorm, label=sorenessNorm)) +
+  stat_smooth_func(geom="text",method="lm",hjust=0,vjust=-2,parse=TRUE) +
+  geom_smooth(method="lm",se=FALSE) +
+  labs(x = "Daily Load", y = "Normalized Fatigue Sccore")+ 
+  theme_bw() +
+  ylim(-6,4) +
+  ggtitle("Daily Work Load vs Fatigue") + 
+  geom_point()
+
+
+ggplot(data = massiveTibble, aes(x = acuteChronicRatioSliding, y = fatigueNorm, label=sorenessNorm)) +
+  stat_smooth_func(geom="text",method="lm",hjust=0,vjust=-2,parse=TRUE) +
+  geom_smooth(method="lm",se=FALSE) +
+  labs(x = "Acute Chronic Ratio Smoothed Data", y = "Normalized Fatigue Sccore")+ 
+  theme_bw() +
+  ylim(-6,4) +
+  geom_point() +
+  ggtitle("Acute Chronic Ratio vs Fatigue")
+
+
+# Second section
+
+
+ggplot(data = massiveTibble, aes(x = sleepHoursNorm, y = fatigueNorm, label=sorenessNorm)) +
+  stat_smooth_func(geom="text",method="lm",hjust=0,vjust=-2,parse=TRUE) +
+  geom_smooth(method="lm",se=FALSE) +
+  labs(x = "Normalized Hours of Sleep", y = "Normalized Fatigue Sccore")+ 
+  theme_bw() +
+  ylim(-6,4) +
+  ggtitle("Hours of Sleep vs Fatigue") + 
+  geom_point()
+
+
+ggplot(data = massiveTibble, aes(x = sorenessNorm, y = fatigueNorm, label=sorenessNorm)) +
+  stat_smooth_func(geom="text",method="lm",hjust=0,vjust=-2,parse=TRUE) +
+  geom_smooth(method="lm",se=FALSE) +
+  labs(x = "Normalized Soreness", y = "Normalized Fatigue Sccore")+ 
+  theme_bw() +
+  ylim(-6,4) +
+  ggtitle("Soreness vs Fatigue") + 
+  geom_point()
+
+
+
+
+
+ggplot(data = massiveTibble) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  ggtitle("Team's Percieved Fatigue") + 
+  geom_point(mapping = aes(x=day, y=sorenessSliding)) + 
+  labs(x = "Days Since August First 2017", y = "Accute Fatugue ")+ 
+  theme_bw() +
+  stat_smooth_func(geom="text",method="lm",hjust=0,parse=TRUE) +
+  geom_smooth(method="lm",se=FALSE) +
+  geom_point() + facet_wrap(~class)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ggplot(data = massiveTibble) + 
   theme(plot.title = element_text(hjust = 0.5)) + 
   ggtitle("Normalized Soreness Box Plots") + 
